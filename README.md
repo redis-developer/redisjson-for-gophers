@@ -78,7 +78,7 @@ _, _ := pipeline.Exec(ctx)
 An example of [document lookup](logic/lookup.go) is also available. Out of all movies loaded, an key will be randomly selected, and the document associated with this key will be looked up. Just like you would do with:
 
 ```bash
-JSON.GET movie:1234
+JSON.GET movie:1234 $.title
 ```
 
 ### ✅ Doing Searches
