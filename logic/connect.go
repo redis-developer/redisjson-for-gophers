@@ -4,15 +4,18 @@ import (
 	"context"
 	"fmt"
 	"github.com/redis/go-redis/v9"
+	"os"
 	"redisjson4gophers/domain"
 )
 
-const (
-	redisConnectionURL = "redis://localhost:6379"
-)
+var redisConnectionURL = func() string {
+	if redisConnURL := os.Getenv("REDIS_CONNECTION_URL"); redisConnURL != "" {
+		return redisConnURL
+	}
+	return "redis://localhost:6379"
+}()
 
 func ConnectWithRedis(ctx context.Context) context.Context {
-
 	connOpts, err := redis.ParseURL(redisConnectionURL)
 	if err != nil {
 		panic(fmt.Errorf("failed to parse Redis URL: %w", err))

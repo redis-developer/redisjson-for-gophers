@@ -34,6 +34,6 @@ resource "rediscloud_essentials_database" "redis_database" {
   replication         = false
 }
 
-output "redis_database_url" {
-    value = "redis://default:${local.redis_database_password}@${rediscloud_essentials_database.redis_database.public_endpoint}"
+output "Export_Redis_Connection_URL" {
+    value = "export REDIS_CONNECTION_URL=redis://default:${local.redis_database_password}@${rediscloud_essentials_database.redis_database.public_endpoint}"
 }

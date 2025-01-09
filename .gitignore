@@ -6,6 +6,7 @@
 *.test
 *.out
 
+.terraform.tfstate.lock.info
 terraform.tfstate.backup
 terraform.tfstate
 .terraform.lock.hcl
