@@ -15,12 +15,7 @@ const (
 	keyPrefix = "movie:"
 )
 
-func IndexMoviesAsDocuments(ctx context.Context) {
-	movies := ctx.Value(domain.MoviesKey).([]domain.Movie)
-	redisClient := ctx.Value(domain.ClientKey).(*redis.Client)
-
-	/************************************ Index Creation ************************************/
-
+func IndexMoviesAsDocuments(ctx context.Context, redisClient *redis.Client, movies []domain.Movie) {
 	redisClient.FTDropIndexWithArgs(ctx, indexName, &redis.FTDropIndexOptions{DeleteDocs: true})
 
 	titleField := &redis.FieldSchema{FieldName: "$.title", FieldType: redis.SearchFieldTypeText, As: "title"}
@@ -37,8 +32,6 @@ func IndexMoviesAsDocuments(ctx context.Context) {
 		&redis.FTCreateOptions{OnJSON: true, Prefix: []interface{}{keyPrefix}},
 		titleField, yearField, plotField, runningTimeField, releaseDateField,
 		ratingField, genresField, actorsField, directorsField).Result()
-
-	/******************************************************************************************/
 
 	pipeline := redisClient.Pipeline()
 	for movieID, movie := range movies {

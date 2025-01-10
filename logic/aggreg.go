@@ -6,12 +6,9 @@ import (
 	"log"
 
 	"github.com/redis/go-redis/v9"
-	"redisjson4gophers/domain"
 )
 
-func MovieCountPerGenreAgg(ctx context.Context) {
-	redisClient := ctx.Value(domain.ClientKey).(*redis.Client)
-
+func MovieCountPerGenreAgg(ctx context.Context, redisClient *redis.Client) {
 	aggregOptions := &redis.FTAggregateOptions{
 		GroupBy: []redis.FTAggregateGroupBy{
 			{
