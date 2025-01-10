@@ -10,7 +10,7 @@ import (
 
 const searchQuery = "@actors:{Keanu Reeves} @genres:{action} @rating:[7.0 +inf] @year:[1995 2005]"
 
-func SearchKeanuReevesMatrixMovies(ctx context.Context) {
+func SearchBestMatrixMovies(ctx context.Context) {
 
 	redisClient := ctx.Value(domain.ClientKey).(*redis.Client)
 
@@ -33,6 +33,6 @@ func SearchKeanuReevesMatrixMovies(ctx context.Context) {
 				movieTitles = append(movieTitles, movie["title"].(string))
 			}
 		}
-		fmt.Printf("🟥 Matrix movies with Keanu Reeves: [%s] \n", strings.Join(movieTitles, ", "))
+		fmt.Printf("🟥 Best Matrix movies with Keanu Reeves: [%s] \n", strings.Join(movieTitles, ", "))
 	}
 }
