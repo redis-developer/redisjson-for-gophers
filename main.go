@@ -13,6 +13,6 @@ func main() {
 	ctx = logic.ConnectWithRedis(ctx)
 	logic.IndexMoviesAsDocuments(ctx)
 	logic.LookupMovieTitleByMovieKey(ctx)
-	logic.SearchKeanuReevesMatrixMovies(ctx)
+	logic.SearchBestMatrixMovies(ctx)
 	logic.MovieCountPerGenreAgg(ctx)
 }
