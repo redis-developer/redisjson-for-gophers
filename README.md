@@ -12,28 +12,25 @@ The data model from this project is a collection of movies from the file [movies
 
 ```json
 {
-    "year": 2012,
-    "title": "The Avengers",
-    "info": {
-        "directors": [
-            "Joss Whedon"
-        ],
-        "release_date": "2012-04-11T00:00:00Z",
-        "rating": 8.2,
-        "genres": [
-            "Action",
-            "Fantasy"
-        ],
-        "image_url": "http://ia.media-imdb.com/images/M/MV5BMTk2NTI1MTU4N15BMl5BanBnXkFtZTcwODg0OTY0Nw@@._V1_SX400_.jpg",
-        "plot": "Nick Fury of S.H.I.E.L.D. assembles a team of superhumans to save the planet from Loki and his army.",
-        "rank": 48,
-        "running_time_secs": 8580,
-        "actors": [
-            "Robert Downey Jr.",
-            "Chris Evans",
-            "Scarlett Johansson"
-        ]
-    }
+  "title": "Blade",
+  "year": 1998,
+  "plot": "A half-vampire, half-mortal man becomes a protector of the mortal race, while slaying evil vampires.",
+  "runningTime": 7200,
+  "releaseDate": "1998-08-19T00:00:00Z",
+  "rating": 7,
+  "genres": [
+    "Action",
+    "Fantasy",
+    "Horror"
+  ],
+  "actors": [
+    "Wesley Snipes",
+    "Stephen Dorff",
+    "Kris Kristofferson"
+  ],
+  "directors": [
+    "Stephen Norrington"
+  ]
 }
 ```
 
