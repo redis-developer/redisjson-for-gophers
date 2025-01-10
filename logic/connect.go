@@ -2,10 +2,9 @@ package logic
 
 import (
 	"context"
-	"fmt"
 	"github.com/redis/go-redis/v9"
+	"log"
 	"os"
-	"redisjson4gophers/domain"
 )
 
 var redisConnectionURL = func() string {
@@ -15,18 +14,20 @@ var redisConnectionURL = func() string {
 	return "redis://localhost:6379"
 }()
 
-func ConnectWithRedis(ctx context.Context) context.Context {
+func ConnectWithRedis(ctx context.Context) (*redis.Client, error) {
 	connOpts, err := redis.ParseURL(redisConnectionURL)
 	if err != nil {
-		panic(fmt.Errorf("failed to parse Redis URL: %w", err))
+		log.Printf("Error parsing the Redis URL: %v", err)
+		return nil, err
 	}
 	connOpts.UnstableResp3 = true // Required for Search
 	redisClient := redis.NewClient(connOpts)
 
 	_, err = redisClient.Ping(ctx).Result()
 	if err != nil {
-		panic(fmt.Errorf("error connecting with Redis: %w", err))
+		log.Printf("Ping request failed: %v", err)
+		return nil, err
 	}
 
-	return context.WithValue(ctx, domain.ClientKey, redisClient)
+	return redisClient, nil
 }

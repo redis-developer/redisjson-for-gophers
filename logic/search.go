@@ -4,15 +4,12 @@ import (
 	"context"
 	"fmt"
 	"github.com/redis/go-redis/v9"
-	"redisjson4gophers/domain"
 	"strings"
 )
 
 const searchQuery = "@actors:{Keanu Reeves} @genres:{action} @rating:[7.0 +inf] @year:[1995 2005]"
 
-func SearchBestMatrixMovies(ctx context.Context) {
-	redisClient := ctx.Value(domain.ClientKey).(*redis.Client)
-
+func SearchBestMatrixMovies(ctx context.Context, redisClient *redis.Client) {
 	searchResult := redisClient.FTSearchWithArgs(ctx, indexName, searchQuery, &redis.FTSearchOptions{
 		Return: []redis.FTSearchReturn{
 			{FieldName: "title", As: "title"},
