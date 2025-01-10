@@ -11,12 +11,10 @@ import (
 )
 
 func LoadMoviesFromFile(ctx context.Context) context.Context {
-
 	const (
 		concurrency = 5
 		moviesFile  = "movies.json"
 	)
-
 	var (
 		movies    []domain.Movie
 		waitGroup = new(sync.WaitGroup)

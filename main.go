@@ -6,7 +6,6 @@ import (
 )
 
 func main() {
-
 	ctx := context.Background()
 
 	ctx = logic.LoadMoviesFromFile(ctx)

@@ -16,7 +16,6 @@ const (
 )
 
 func IndexMoviesAsDocuments(ctx context.Context) {
-
 	movies := ctx.Value(domain.MoviesKey).([]domain.Movie)
 	redisClient := ctx.Value(domain.ClientKey).(*redis.Client)
 

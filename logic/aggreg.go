@@ -3,23 +3,40 @@ package logic
 import (
 	"context"
 	"fmt"
-	"github.com/redis/go-redis/v9"
 	"log"
+
+	"github.com/redis/go-redis/v9"
 	"redisjson4gophers/domain"
 )
 
 func MovieCountPerGenreAgg(ctx context.Context) {
-
 	redisClient := ctx.Value(domain.ClientKey).(*redis.Client)
 
-	cmdResult := redisClient.Do(ctx,
-		"FT.AGGREGATE", indexName, "*", "GROUPBY", "1",
-		"@genres", "REDUCE", "COUNT", "0", "AS", "Count", "SORTBY",
-		"2", "@Count", "DESC", "MAX", "5",
-	)
-	rawResult, err := cmdResult.Result()
+	aggregOptions := &redis.FTAggregateOptions{
+		GroupBy: []redis.FTAggregateGroupBy{
+			{
+				Fields: []interface{}{"@genres"},
+				Reduce: []redis.FTAggregateReducer{
+					{
+						Reducer: redis.SearchCount,
+						As:      "Count",
+					},
+				},
+			},
+		},
+		SortBy: []redis.FTAggregateSortBy{
+			{
+				FieldName: "@Count",
+				Desc:      true,
+			},
+		},
+		SortByMax: 5,
+	}
+
+	rawResult, err := redisClient.FTAggregateWithArgs(ctx, indexName, "*", aggregOptions).RawResult()
 	if err != nil {
 		log.Printf("Error executing the aggregation: %v", err)
+		return
 	}
 
 	if rawResult != nil {
