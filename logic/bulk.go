@@ -17,7 +17,7 @@ func IndexMoviesAsDocuments(ctx context.Context, redisClient *redis.Client, movi
 		if err != nil {
 			log.Printf("Error marshaling movie into JSON: %v", err)
 		}
-		pipeline.JSONSet(ctx, keyPrefix+strconv.Itoa(movieID+1), "$", string(movieAsJSON))
+		pipeline.JSONSet(ctx, KeyPrefix+strconv.Itoa(movieID+1), "$", string(movieAsJSON))
 	}
 
 	_, err := pipeline.Exec(ctx)

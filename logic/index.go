@@ -8,12 +8,12 @@ import (
 )
 
 const (
-	indexName = "movies_index"
-	keyPrefix = "movie:"
+	IndexName = "movies_index"
+	KeyPrefix = "movie:"
 )
 
 func CreateMoviesIndexOnRedis(ctx context.Context, redisClient *redis.Client) {
-	redisClient.FTDropIndexWithArgs(ctx, indexName, &redis.FTDropIndexOptions{DeleteDocs: true})
+	redisClient.FTDropIndexWithArgs(ctx, IndexName, &redis.FTDropIndexOptions{DeleteDocs: true})
 
 	titleField := &redis.FieldSchema{FieldName: "$.title", FieldType: redis.SearchFieldTypeText, As: "title"}
 	yearField := &redis.FieldSchema{FieldName: "$.year", FieldType: redis.SearchFieldTypeNumeric, As: "year"}
@@ -25,8 +25,8 @@ func CreateMoviesIndexOnRedis(ctx context.Context, redisClient *redis.Client) {
 	actorsField := &redis.FieldSchema{FieldName: "$.actors.*", FieldType: redis.SearchFieldTypeTag, As: "actors"}
 	directorsField := &redis.FieldSchema{FieldName: "$.directors.*", FieldType: redis.SearchFieldTypeTag, As: "directors"}
 
-	_, err := redisClient.FTCreate(ctx, indexName,
-		&redis.FTCreateOptions{OnJSON: true, Prefix: []interface{}{keyPrefix}},
+	_, err := redisClient.FTCreate(ctx, IndexName,
+		&redis.FTCreateOptions{OnJSON: true, Prefix: []interface{}{KeyPrefix}},
 		titleField, yearField, plotField, runningTimeField, releaseDateField,
 		ratingField, genresField, actorsField, directorsField).Result()
 	if err != nil {

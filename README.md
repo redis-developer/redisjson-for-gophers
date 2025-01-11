@@ -64,7 +64,7 @@ for movieID, movie := range movies {
     if err != nil {
         log.Printf("Error marshaling movie into JSON: %v", err)
     }
-    pipeline.JSONSet(ctx, keyPrefix+strconv.Itoa(movieID), "$", string(movieAsJSON))
+    pipeline.JSONSet(ctx, KeyPrefix+strconv.Itoa(movieID+1), "$", string(movieAsJSON))
 }
 
 _, _ := pipeline.Exec(ctx)
