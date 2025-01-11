@@ -10,7 +10,7 @@ import (
 const searchQuery = "@actors:{Keanu Reeves} @genres:{action} @rating:[7.0 +inf] @year:[1995 2005]"
 
 func SearchBestMatrixMovies(ctx context.Context, redisClient *redis.Client) {
-	searchResult := redisClient.FTSearchWithArgs(ctx, indexName, searchQuery, &redis.FTSearchOptions{
+	searchResult := redisClient.FTSearchWithArgs(ctx, IndexName, searchQuery, &redis.FTSearchOptions{
 		Return: []redis.FTSearchReturn{
 			{FieldName: "title", As: "title"},
 			{FieldName: "year", As: "year"},
