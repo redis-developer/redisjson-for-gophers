@@ -1,20 +1,5 @@
 package domain
 
-/*************************************************/
-/*********** Internal for the Context ************/
-/*************************************************/
-
-type contextKey struct {
-	Key int
-}
-
-var MoviesKey contextKey = contextKey{Key: 1}
-var ClientKey contextKey = contextKey{Key: 2}
-
-/*************************************************/
-/*********** Types for the Application ***********/
-/*************************************************/
-
 type MovieRaw struct {
 	Title string   `json:"title"`
 	Year  int      `json:"year"`
