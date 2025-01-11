@@ -21,6 +21,8 @@ func main() {
 		}
 	}(redisClient)
 
+	logic.CreateMoviesIndexOnRedis(ctx, redisClient)
+
 	movies, err := logic.LoadMoviesFromFile("movies.json")
 	if err != nil {
 		log.Fatalf("Error loading movies from file: %v", err)

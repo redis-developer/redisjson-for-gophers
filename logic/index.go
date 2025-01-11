@@ -2,20 +2,17 @@ package logic
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"github.com/redis/go-redis/v9"
 	"log"
-	"redisjson4gophers/domain"
-	"strconv"
 )
 
 const (
-	indexName = "json_movies_index"
+	indexName = "movies_index"
 	keyPrefix = "movie:"
 )
 
-func IndexMoviesAsDocuments(ctx context.Context, redisClient *redis.Client, movies []domain.Movie) {
+func CreateMoviesIndexOnRedis(ctx context.Context, redisClient *redis.Client) {
 	redisClient.FTDropIndexWithArgs(ctx, indexName, &redis.FTDropIndexOptions{DeleteDocs: true})
 
 	titleField := &redis.FieldSchema{FieldName: "$.title", FieldType: redis.SearchFieldTypeText, As: "title"}
@@ -28,24 +25,13 @@ func IndexMoviesAsDocuments(ctx context.Context, redisClient *redis.Client, movi
 	actorsField := &redis.FieldSchema{FieldName: "$.actors.*", FieldType: redis.SearchFieldTypeTag, As: "actors"}
 	directorsField := &redis.FieldSchema{FieldName: "$.directors.*", FieldType: redis.SearchFieldTypeTag, As: "directors"}
 
-	redisClient.FTCreate(ctx, indexName,
+	_, err := redisClient.FTCreate(ctx, indexName,
 		&redis.FTCreateOptions{OnJSON: true, Prefix: []interface{}{keyPrefix}},
 		titleField, yearField, plotField, runningTimeField, releaseDateField,
 		ratingField, genresField, actorsField, directorsField).Result()
-
-	pipeline := redisClient.Pipeline()
-	for movieID, movie := range movies {
-		movieAsJSON, err := json.Marshal(movie)
-		if err != nil {
-			log.Printf("Error marshaling movie into JSON: %v", err)
-		}
-		pipeline.JSONSet(ctx, keyPrefix+strconv.Itoa(movieID), "$", string(movieAsJSON))
-	}
-
-	_, err := pipeline.Exec(ctx)
 	if err != nil {
-		log.Printf("Error writing JSON documents into Redis: %v", err)
+		log.Printf("Error creating the index: %v", err)
 	}
 
-	fmt.Printf("🟥 Movies indexed on Redis: %d \n", len(movies))
+	fmt.Println("🟥 Index created successfully")
 }
