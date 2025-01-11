@@ -2,6 +2,8 @@
 FT.CREATE json_movies_index ON JSON SCHEMA
     $.title AS title TEXT WEIGHT 1
     $.year AS year NUMERIC
+    $.plot AS plot TEXT WEIGHT 1
+    $.plot_embeddings AS plot_embeddings VECTOR FLAT 6 TYPE FLOAT32 DIM 1536 DISTANCE_METRIC COSINE
     $.runningTime AS runningTime NUMERIC
     $.releaseDate AS releaseDate TEXT WEIGHT 1
     $.rating AS rating NUMERIC

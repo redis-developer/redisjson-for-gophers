@@ -1,20 +1,5 @@
 package domain
 
-/*************************************************/
-/*********** Internal for the Context ************/
-/*************************************************/
-
-type contextKey struct {
-	Key int
-}
-
-var MoviesKey contextKey = contextKey{Key: 1}
-var ClientKey contextKey = contextKey{Key: 2}
-
-/*************************************************/
-/*********** Types for the Application ***********/
-/*************************************************/
-
 type MovieRaw struct {
 	Title string   `json:"title"`
 	Year  int      `json:"year"`
@@ -32,13 +17,19 @@ type InfoRaw struct {
 }
 
 type Movie struct {
-	Title       string   `json:"title"`
-	Year        int      `json:"year"`
-	Plot        string   `json:"plot"`
-	RunningTime float32  `json:"runningTime"`
-	ReleaseDate string   `json:"releaseDate"`
-	Rating      float32  `json:"rating"`
-	Genres      []string `json:"genres"`
-	Actors      []string `json:"actors"`
-	Directors   []string `json:"directors"`
+	Title          string    `json:"title"`
+	Year           int       `json:"year"`
+	Plot           string    `json:"plot"`
+	PlotEmbeddings []float32 `json:"plot_embeddings"`
+	RunningTime    float32   `json:"runningTime"`
+	ReleaseDate    string    `json:"releaseDate"`
+	Rating         float32   `json:"rating"`
+	Genres         []string  `json:"genres"`
+	Actors         []string  `json:"actors"`
+	Directors      []string  `json:"directors"`
+}
+
+type MovieEmbeddings struct {
+	MovieKey       string    `json:"movie_key"`
+	PlotEmbeddings []float32 `json:"plot_embeddings"`
 }

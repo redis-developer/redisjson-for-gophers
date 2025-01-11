@@ -79,7 +79,6 @@ func LoadMoviesFromFile(fileName string) ([]domain.Movie, error) {
 	waitGroup.Wait()
 	close(errChan)
 
-	// Collect errors
 	var errs []error
 	for err := range errChan {
 		errs = append(errs, err)
