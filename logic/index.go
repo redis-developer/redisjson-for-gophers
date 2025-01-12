@@ -26,9 +26,9 @@ func CreateMoviesIndexOnRedis(ctx context.Context, redisClient *redis.Client) {
 	runningTimeField := &redis.FieldSchema{FieldName: "$.runningTime", FieldType: redis.SearchFieldTypeNumeric, As: "runningTime"}
 	releaseDateField := &redis.FieldSchema{FieldName: "$.releaseDate", FieldType: redis.SearchFieldTypeText, As: "releaseDate"}
 	ratingField := &redis.FieldSchema{FieldName: "$.rating", FieldType: redis.SearchFieldTypeNumeric, As: "rating"}
-	genresField := &redis.FieldSchema{FieldName: "$.genres.*", FieldType: redis.SearchFieldTypeTag, As: "genres"}
-	actorsField := &redis.FieldSchema{FieldName: "$.actors.*", FieldType: redis.SearchFieldTypeTag, As: "actors"}
-	directorsField := &redis.FieldSchema{FieldName: "$.directors.*", FieldType: redis.SearchFieldTypeTag, As: "directors"}
+	genresField := &redis.FieldSchema{FieldName: "$.genres.*", FieldType: redis.SearchFieldTypeTag, As: "genres", Separator: ","}
+	actorsField := &redis.FieldSchema{FieldName: "$.actors.*", FieldType: redis.SearchFieldTypeTag, As: "actors", Separator: ","}
+	directorsField := &redis.FieldSchema{FieldName: "$.directors.*", FieldType: redis.SearchFieldTypeTag, As: "directors", Separator: ","}
 
 	_, err := redisClient.FTCreate(ctx, IndexName,
 		&redis.FTCreateOptions{OnJSON: true, Prefix: []interface{}{KeyPrefix}},

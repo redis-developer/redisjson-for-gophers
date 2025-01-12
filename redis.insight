@@ -7,9 +7,9 @@ FT.CREATE movies_index ON JSON SCHEMA
     $.runningTime AS runningTime NUMERIC
     $.releaseDate AS releaseDate TEXT WEIGHT 1
     $.rating AS rating NUMERIC
-    $.genres.* AS genres TAG
-    $.actors.* AS actors TAG
-    $.directors.* AS directors TAG
+    $.genres.* AS genres TAG SEPARATOR ","
+    $.actors.* AS actors TAG SEPARATOR ","
+    $.directors.* AS directors TAG SEPARATOR ","
 
 // Top 5 genres and their movie count
 FT.AGGREGATE movies_index * GROUPBY 1 @genres REDUCE COUNT 0 AS Count SORTBY 2 @Count DESC MAX 5
