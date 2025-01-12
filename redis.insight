@@ -6,9 +6,9 @@ FT.CREATE movies_index ON JSON SCHEMA
     $.runningTime AS runningTime NUMERIC
     $.releaseDate AS releaseDate TEXT WEIGHT 1
     $.rating AS rating NUMERIC
-    $.genres.* AS genres TAG
-    $.actors.* AS actors TAG
-    $.directors.* AS directors TAG
+    $.genres.* AS genres TAG SEPARATOR ","
+    $.actors.* AS actors TAG SEPARATOR ","
+    $.directors.* AS directors TAG SEPARATOR ","
 
 // Keanu Reeves Matrix movies
 FT.SEARCH movies_index "@actors:{Keanu Reeves} @genres:{action} @rating:[7.0 +inf] @year:[1995 2005]" RETURN 3 $.title $.year $.rating
