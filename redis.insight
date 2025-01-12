@@ -1,9 +1,9 @@
 // Create the index
-FT.CREATE json_movies_index ON JSON SCHEMA
+FT.CREATE movies_index ON JSON SCHEMA
     $.title AS title TEXT WEIGHT 1
     $.year AS year NUMERIC
     $.plot AS plot TEXT WEIGHT 1
-    $.plot_embeddings AS plot_embeddings VECTOR FLAT 6 TYPE FLOAT32 DIM 1536 DISTANCE_METRIC COSINE
+    $.plot_embedding AS plot_embedding VECTOR FLAT 6 TYPE FLOAT64 DIM 1536 DISTANCE_METRIC COSINE
     $.runningTime AS runningTime NUMERIC
     $.releaseDate AS releaseDate TEXT WEIGHT 1
     $.rating AS rating NUMERIC
@@ -11,8 +11,8 @@ FT.CREATE json_movies_index ON JSON SCHEMA
     $.actors.* AS actors TAG
     $.directors.* AS directors TAG
 
-// Keanu Reeves Matrix movies
-FT.SEARCH movies_index "@actors:{Keanu Reeves} @genres:{action} @rating:[7.0 +inf] @year:[1995 2005]" RETURN 3 $.title $.year $.rating
-
 // Top 5 genres and their movie count
 FT.AGGREGATE movies_index * GROUPBY 1 @genres REDUCE COUNT 0 AS Count SORTBY 2 @Count DESC MAX 5
+
+// Finding movie given its plot
+FT.SEARCH movies_index "(*)=>[KNN 1 @plotEmbedding $vector]" RETURN 6 $.title AS title $.plot AS plot PARAMS 2 vector "<QUERY_PARAM_EMBEDDING>" DIALECT 2
