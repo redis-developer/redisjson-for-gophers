@@ -7,7 +7,7 @@ import (
 	"log"
 )
 
-const searchQuery = "(*)=>[KNN 1 @plotEmbeddings $vector]"
+const searchQuery = "(*)=>[KNN 1 @plotEmbedding $vector]"
 
 func SearchMovieWithVectorField(ctx context.Context, redisClient *redis.Client) {
 	queryParam := "He wears a skull in his chest and seeks revenge for his family."
@@ -32,13 +32,12 @@ func SearchMovieWithVectorField(ctx context.Context, redisClient *redis.Client) 
 		var moviePlot string
 		if rawResults["total_results"].(int64) > 0 {
 			results := rawResults["results"].([]interface{})
-			for _, result := range results {
-				movie := result.(map[interface{}]interface{})["extra_attributes"].(map[interface{}]interface{})
-				movieTitle = movie["title"].(string)
-				moviePlot = movie["plot"].(string)
-			}
+			movie := results[0].(map[interface{}]interface{})["extra_attributes"].(map[interface{}]interface{})
+			movieTitle = movie["title"].(string)
+			moviePlot = movie["plot"].(string)
 		}
-		fmt.Println("🟥 Similarity search result: ")
-		fmt.Printf("   %s \n   %s \n", movieTitle, moviePlot)
+		fmt.Println("🟥 Similarity search result:")
+		fmt.Printf("   🎥 %s \n", movieTitle)
+		fmt.Printf("   💬 %s \n", moviePlot)
 	}
 }

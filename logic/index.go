@@ -18,7 +18,7 @@ func CreateMoviesIndexOnRedis(ctx context.Context, redisClient *redis.Client) {
 	titleField := &redis.FieldSchema{FieldName: "$.title", FieldType: redis.SearchFieldTypeText, As: "title"}
 	yearField := &redis.FieldSchema{FieldName: "$.year", FieldType: redis.SearchFieldTypeNumeric, As: "year"}
 	plotField := &redis.FieldSchema{FieldName: "$.plot", FieldType: redis.SearchFieldTypeText, As: "plot"}
-	plotEmbeddingsField := &redis.FieldSchema{FieldName: "$.plotEmbeddings", FieldType: redis.SearchFieldTypeVector, As: "plotEmbeddings",
+	plotEmbeddingsField := &redis.FieldSchema{FieldName: "$.plotEmbedding", FieldType: redis.SearchFieldTypeVector, As: "plotEmbedding",
 		VectorArgs: &redis.FTVectorArgs{
 			HNSWOptions: &redis.FTHNSWOptions{Type: "FLOAT64", Dim: 1536, DistanceMetric: "COSINE"},
 		},

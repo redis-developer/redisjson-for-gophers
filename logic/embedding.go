@@ -20,6 +20,7 @@ func CreateEmbedding(ctx context.Context, text string) []float64 {
 
 	response, err := client.Embeddings.New(ctx, params)
 	if err != nil {
+		log.Printf("Error creating embedding: %v", err)
 		return nil
 	}
 

@@ -17,14 +17,14 @@ type InfoRaw struct {
 }
 
 type Movie struct {
-	Title          string    `json:"title"`
-	Year           int       `json:"year"`
-	Plot           string    `json:"plot"`
-	PlotEmbeddings []float64 `json:"plotEmbeddings"`
-	RunningTime    float32   `json:"runningTime"`
-	ReleaseDate    string    `json:"releaseDate"`
-	Rating         float32   `json:"rating"`
-	Genres         []string  `json:"genres"`
-	Actors         []string  `json:"actors"`
-	Directors      []string  `json:"directors"`
+	Title         string    `json:"title"`
+	Year          int       `json:"year"`
+	Plot          string    `json:"plot"`
+	PlotEmbedding []float64 `json:"plotEmbedding"`
+	RunningTime   float32   `json:"runningTime"`
+	ReleaseDate   string    `json:"releaseDate"`
+	Rating        float32   `json:"rating"`
+	Genres        []string  `json:"genres"`
+	Actors        []string  `json:"actors"`
+	Directors     []string  `json:"directors"`
 }

@@ -13,6 +13,7 @@ import (
 func IndexMoviesAsDocuments(ctx context.Context, redisClient *redis.Client, movies []domain.Movie) {
 	pipeline := redisClient.Pipeline()
 	for movieID, movie := range movies {
+		movie.PlotEmbedding = CreateEmbedding(ctx, movie.Plot)
 		movieAsJSON, err := json.Marshal(movie)
 		if err != nil {
 			log.Printf("Error marshaling movie into JSON: %v", err)
