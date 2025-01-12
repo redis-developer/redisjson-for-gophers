@@ -28,16 +28,12 @@ func SearchMovieWithVectorField(ctx context.Context, redisClient *redis.Client) 
 	if rawResult != nil {
 		rawResults := rawResult.(map[interface{}]interface{})
 
-		var movieTitle string
-		var moviePlot string
 		if rawResults["total_results"].(int64) > 0 {
 			results := rawResults["results"].([]interface{})
 			movie := results[0].(map[interface{}]interface{})["extra_attributes"].(map[interface{}]interface{})
-			movieTitle = movie["title"].(string)
-			moviePlot = movie["plot"].(string)
+			fmt.Println("🟥 Similarity search result:")
+			fmt.Printf("   🎥 %s \n", movie["title"].(string))
+			fmt.Printf("   💬 %s \n", movie["plot"].(string))
 		}
-		fmt.Println("🟥 Similarity search result:")
-		fmt.Printf("   🎥 %s \n", movieTitle)
-		fmt.Printf("   💬 %s \n", moviePlot)
 	}
 }
