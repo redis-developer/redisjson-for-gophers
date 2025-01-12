@@ -16,5 +16,5 @@ func LookupMovieTitleByMovieKey(ctx context.Context, redisClient *redis.Client, 
 		log.Printf("Error getting the movie title: %v", err)
 	}
 
-	fmt.Printf("🟥 Movie with the key '%s': %s \n", movieKey, movieTitle)
+	fmt.Printf("🟥 Movie with the key %s %s \n", movieKey, movieTitle)
 }
