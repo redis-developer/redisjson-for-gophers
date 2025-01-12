@@ -30,6 +30,6 @@ func main() {
 
 	logic.IndexMoviesAsDocuments(ctx, redisClient, movies)
 	logic.LookupMovieTitleByMovieKey(ctx, redisClient, len(movies))
-	logic.SearchBestMatrixMovies(ctx, redisClient)
 	logic.MovieCountPerGenreAgg(ctx, redisClient)
+	logic.SearchBestMatrixMovies(ctx, redisClient)
 }

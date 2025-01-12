@@ -29,6 +29,6 @@ func SearchBestMatrixMovies(ctx context.Context, redisClient *redis.Client) {
 				movieTitles = append(movieTitles, movie["title"].(string))
 			}
 		}
-		fmt.Printf("🟥 Best Matrix movies with Keanu Reeves: [%s] \n", strings.Join(movieTitles, ", "))
+		fmt.Printf("🟥 Search results: [%s] \n", strings.Join(movieTitles, ", "))
 	}
 }
