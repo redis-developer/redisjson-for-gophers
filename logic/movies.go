@@ -79,6 +79,7 @@ func LoadMoviesFromFile(fileName string) ([]domain.Movie, error) {
 	waitGroup.Wait()
 	close(errChan)
 
+	// Collect errors
 	var errs []error
 	for err := range errChan {
 		errs = append(errs, err)
@@ -92,6 +93,6 @@ func LoadMoviesFromFile(fileName string) ([]domain.Movie, error) {
 		return movies, errors.New(errorMsg)
 	}
 
-	fmt.Printf("🟥 Movies loaded from the file: %d \n", len(movies))
+	fmt.Printf("🟥 Movies loaded from file: %d \n", len(movies))
 	return movies, nil
 }

@@ -10,15 +10,14 @@ import (
 const searchQuery = "(*)=>[KNN 1 @plotEmbeddings $vector]"
 
 func SearchMovieWithVectorField(ctx context.Context, redisClient *redis.Client) {
-	//query := "He seeks revenge for the death of his family. He is a vigilante."
-	query := "He is also known as the man without fear."
+	queryParam := "He wears a skull in his chest and seeks revenge for his family."
 
 	rawResult, err := redisClient.FTSearchWithArgs(ctx, IndexName, searchQuery, &redis.FTSearchOptions{
 		Return: []redis.FTSearchReturn{
 			{FieldName: "$.title", As: "title"},
 			{FieldName: "$.plot", As: "plot"},
 		},
-		Params:         map[string]interface{}{"vector": ConvertFloatsToByte(CreateEmbedding(ctx, query))},
+		Params:         map[string]interface{}{"vector": ConvertFloatsToByte(CreateEmbedding(ctx, queryParam))},
 		DialectVersion: 2,
 	}).RawResult()
 	if err != nil {

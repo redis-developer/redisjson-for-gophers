@@ -13,13 +13,11 @@ import (
 func IndexMoviesAsDocuments(ctx context.Context, redisClient *redis.Client, movies []domain.Movie) {
 	pipeline := redisClient.Pipeline()
 	for movieID, movie := range movies {
-		movieKey := KeyPrefix + strconv.Itoa(movieID+1)
-		movie.PlotEmbeddings = CreateEmbedding(ctx, movie.Plot)
 		movieAsJSON, err := json.Marshal(movie)
 		if err != nil {
 			log.Printf("Error marshaling movie into JSON: %v", err)
 		}
-		pipeline.JSONSet(ctx, movieKey, "$", string(movieAsJSON))
+		pipeline.JSONSet(ctx, KeyPrefix+strconv.Itoa(movieID+1), "$", string(movieAsJSON))
 	}
 
 	_, err := pipeline.Exec(ctx)
