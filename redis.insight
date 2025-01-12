@@ -1,5 +1,5 @@
 // Create the index
-FT.CREATE json_movies_index ON JSON SCHEMA
+FT.CREATE movies_index ON JSON SCHEMA
     $.title AS title TEXT WEIGHT 1
     $.year AS year NUMERIC
     $.plot AS plot TEXT WEIGHT 1

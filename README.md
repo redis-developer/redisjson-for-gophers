@@ -78,20 +78,20 @@ An example of [document lookup](logic/lookup.go) is also available. Out of all m
 JSON.GET movie:1234 $.title
 ```
 
-### 🟥 Doing Searches
-
-Obviously, this project couldn't leave behind an example of a search. The implemented [search](logic/search.go) look for all the best action movies from [Keanu Reeves](https://en.wikipedia.org/wiki/Keanu_Reeves) from 1995 to 2005. This search is the equivalent to:
-
-```bash
-FT.SEARCH json_movies_index "@actors:{Keanu Reeves} @genres:{action} @rating:[7.0 +inf] @year:[1995 2005]" RETURN 3 $.title $.year $.rating
-```
-
 ### 🟥 Aggregation Analytics
 
 Finally, the project also runs a very interesting [aggregation](logic/aggreg.go) to find out the top five genres and their respective movie counts. Just like you would do with:
 
 ```bash
 FT.AGGREGATE json_movies_index * GROUPBY 1 @genres REDUCE COUNT 0 AS Count SORTBY 2 @Count DESC MAX 5
+```
+
+### 🟥 Document Searches
+
+Obviously, this project couldn't leave behind an example of a document search. The implemented [search](logic/search.go) to look for all the best action movies from [Keanu Reeves](https://en.wikipedia.org/wiki/Keanu_Reeves) from 1995 to 2005.
+
+```bash
+FT.SEARCH movies_index "@actors:{Keanu Reeves} @genres:{action} @rating:[7.0 +inf] @year:[1995 2005]" RETURN 3 $.title $.year $.rating
 ```
 
 # License
