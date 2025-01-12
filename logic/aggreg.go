@@ -30,7 +30,7 @@ func MovieCountPerGenreAgg(ctx context.Context, redisClient *redis.Client) {
 		SortByMax: 5,
 	}
 
-	rawResult, err := redisClient.FTAggregateWithArgs(ctx, indexName, "*", aggregOptions).RawResult()
+	rawResult, err := redisClient.FTAggregateWithArgs(ctx, IndexName, "*", aggregOptions).RawResult()
 	if err != nil {
 		log.Printf("Error executing the aggregation: %v", err)
 		return

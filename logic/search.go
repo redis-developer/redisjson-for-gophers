@@ -4,31 +4,42 @@ import (
 	"context"
 	"fmt"
 	"github.com/redis/go-redis/v9"
-	"strings"
+	"log"
 )
 
-const searchQuery = "@actors:{Keanu Reeves} @genres:{action} @rating:[7.0 +inf] @year:[1995 2005]"
+const searchQuery = "(*)=>[KNN 1 @plotEmbeddings $vector]"
 
-func SearchBestMatrixMovies(ctx context.Context, redisClient *redis.Client) {
-	searchResult := redisClient.FTSearchWithArgs(ctx, indexName, searchQuery, &redis.FTSearchOptions{
+func SearchMovieWithVectorField(ctx context.Context, redisClient *redis.Client) {
+	//query := "He seeks revenge for the death of his family. He is a vigilante."
+	query := "He is also known as the man without fear."
+
+	rawResult, err := redisClient.FTSearchWithArgs(ctx, IndexName, searchQuery, &redis.FTSearchOptions{
 		Return: []redis.FTSearchReturn{
-			{FieldName: "title", As: "title"},
-			{FieldName: "year", As: "year"},
-			{FieldName: "rating", As: "rating"},
+			{FieldName: "$.title", As: "title"},
+			{FieldName: "$.plot", As: "plot"},
 		},
-	})
+		Params:         map[string]interface{}{"vector": ConvertFloatsToByte(CreateEmbedding(ctx, query))},
+		DialectVersion: 2,
+	}).RawResult()
+	if err != nil {
+		log.Printf("Error executing the search: %v", err)
+		return
+	}
 
-	if searchResult.RawVal() != nil {
-		rawResults := searchResult.RawVal().(map[interface{}]interface{})
+	if rawResult != nil {
+		rawResults := rawResult.(map[interface{}]interface{})
 
-		var movieTitles []string
+		var movieTitle string
+		var moviePlot string
 		if rawResults["total_results"].(int64) > 0 {
 			results := rawResults["results"].([]interface{})
 			for _, result := range results {
 				movie := result.(map[interface{}]interface{})["extra_attributes"].(map[interface{}]interface{})
-				movieTitles = append(movieTitles, movie["title"].(string))
+				movieTitle = movie["title"].(string)
+				moviePlot = movie["plot"].(string)
 			}
 		}
-		fmt.Printf("🟥 Best Matrix movies with Keanu Reeves: [%s] \n", strings.Join(movieTitles, ", "))
+		fmt.Println("🟥 Similarity search result: ")
+		fmt.Printf("   %s \n   %s \n", movieTitle, moviePlot)
 	}
 }

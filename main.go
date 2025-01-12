@@ -21,18 +21,15 @@ func main() {
 		}
 	}(redisClient)
 
+	logic.CreateMoviesIndexOnRedis(ctx, redisClient)
+
 	movies, err := logic.LoadMoviesFromFile("movies.json")
 	if err != nil {
 		log.Fatalf("Error loading movies from file: %v", err)
 	}
 
-	embeddings, err := logic.LoadEmbeddingsFromFile("embeddings.json")
-	if err != nil {
-		log.Fatalf("Error loading embeddings from file: %v", err)
-	}
-
-	logic.IndexMoviesAsDocuments(ctx, redisClient, movies, embeddings)
+	logic.IndexMoviesAsDocuments(ctx, redisClient, movies)
 	logic.LookupMovieTitleByMovieKey(ctx, redisClient, len(movies))
-	logic.SearchBestMatrixMovies(ctx, redisClient)
 	logic.MovieCountPerGenreAgg(ctx, redisClient)
+	logic.SearchMovieWithVectorField(ctx, redisClient)
 }

@@ -1,52 +1,42 @@
 package logic
 
 import (
+	"bytes"
 	"context"
-	"encoding/json"
-	"fmt"
-	"github.com/aws/aws-sdk-go-v2/aws"
-	"github.com/aws/aws-sdk-go-v2/config"
-	"github.com/aws/aws-sdk-go-v2/service/bedrockruntime"
+	"encoding/binary"
+	"github.com/openai/openai-go"
+	"github.com/openai/openai-go/shared"
+	"log"
 )
 
-type embeddingRequest struct {
-	InputText string `json:"inputText"`
+func CreateEmbedding(ctx context.Context, text string) []float64 {
+	client := openai.NewClient()
+
+	params := openai.EmbeddingNewParams{
+		Input:          openai.F[openai.EmbeddingNewParamsInputUnion](shared.UnionString(text)),
+		Model:          openai.F(openai.EmbeddingModelTextEmbeddingAda002),
+		EncodingFormat: openai.F(openai.EmbeddingNewParamsEncodingFormatFloat),
+	}
+
+	response, err := client.Embeddings.New(ctx, params)
+	if err != nil {
+		return nil
+	}
+
+	return response.Data[0].Embedding
 }
 
-type embeddingResponse struct {
-	Embedding []float32 `json:"embedding"`
-}
+func ConvertFloatsToByte(floats []float64) []byte {
+	if len(floats) != 1536 {
+		log.Fatalf("Expected 1536 dimensions, but got %d", len(floats))
+	}
 
-func GetEmbedding(input string) ([]float32, error) {
-	cfg, err := config.LoadDefaultConfig(context.TODO(), config.WithRegion("us-east-1"))
+	buf := new(bytes.Buffer)
+	err := binary.Write(buf, binary.LittleEndian, floats)
 	if err != nil {
-		return nil, fmt.Errorf("unable to load SDK config, %v", err)
+		log.Fatalf("binary.Write failed: %v", err)
 	}
 
-	client := bedrockruntime.NewFromConfig(cfg)
-
-	reqBody := embeddingRequest{
-		InputText: input,
-	}
-	jsonBody, err := json.Marshal(reqBody)
-	if err != nil {
-		return nil, fmt.Errorf("error marshalling request: %v", err)
-	}
-
-	resp, err := client.InvokeModel(context.TODO(), &bedrockruntime.InvokeModelInput{
-		Body:        jsonBody,
-		ModelId:     aws.String("amazon.titan-embed-text-v1"),
-		ContentType: aws.String("application/json"),
-	})
-	if err != nil {
-		return nil, fmt.Errorf("error invoking model: %v", err)
-	}
-
-	var embeddingResp embeddingResponse
-	err = json.Unmarshal(resp.Body, &embeddingResp)
-	if err != nil {
-		return nil, fmt.Errorf("error unmarshalling response: %v", err)
-	}
-
-	return embeddingResp.Embedding, nil
+	result := buf.Bytes()
+	return result
 }

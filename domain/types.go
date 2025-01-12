@@ -20,16 +20,11 @@ type Movie struct {
 	Title          string    `json:"title"`
 	Year           int       `json:"year"`
 	Plot           string    `json:"plot"`
-	PlotEmbeddings []float32 `json:"plot_embeddings"`
+	PlotEmbeddings []float64 `json:"plotEmbeddings"`
 	RunningTime    float32   `json:"runningTime"`
 	ReleaseDate    string    `json:"releaseDate"`
 	Rating         float32   `json:"rating"`
 	Genres         []string  `json:"genres"`
 	Actors         []string  `json:"actors"`
 	Directors      []string  `json:"directors"`
-}
-
-type MovieEmbeddings struct {
-	MovieKey       string    `json:"movie_key"`
-	PlotEmbeddings []float32 `json:"plot_embeddings"`
 }
