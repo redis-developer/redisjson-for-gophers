@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"github.com/redis/go-redis/v9"
-	"strings"
 )
 
 const searchQuery = "@actors:{Keanu Reeves} @genres:{action} @rating:[7.0 +inf] @year:[1995 2005]"
@@ -29,6 +28,9 @@ func SearchBestMatrixMovies(ctx context.Context, redisClient *redis.Client) {
 				movieTitles = append(movieTitles, movie["title"].(string))
 			}
 		}
-		fmt.Printf("🟥 Search results: [%s] \n", strings.Join(movieTitles, ", "))
+		fmt.Println("🟥 Document search results:")
+		for _, title := range movieTitles {
+			fmt.Printf("   ✅ %s \n", title)
+		}
 	}
 }
