@@ -10,8 +10,8 @@ FT.CREATE movies_index ON JSON SCHEMA
     $.actors.* AS actors TAG SEPARATOR ","
     $.directors.* AS directors TAG SEPARATOR ","
 
-// Keanu Reeves Matrix movies
-FT.SEARCH movies_index "@actors:{Keanu Reeves} @genres:{action} @rating:[7.0 +inf] @year:[1995 2005]" RETURN 3 $.title $.year $.rating
-
 // Top 5 genres and their movie count
 FT.AGGREGATE movies_index * GROUPBY 1 @genres REDUCE COUNT 0 AS Count SORTBY 2 @Count DESC MAX 5
+
+// Keanu Reeves Matrix movies
+FT.SEARCH movies_index "@actors:{Keanu Reeves} @genres:{action} @rating:[7.0 +inf] @year:[1995 2005]" RETURN 3 $.title $.year $.rating
