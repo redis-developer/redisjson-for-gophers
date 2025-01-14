@@ -35,6 +35,7 @@ func IndexMoviesAsDocuments(ctx context.Context, redisClient *redis.Client, movi
 		go func() {
 			defer waitGroup.Done()
 			pipeline := redisClient.Pipeline()
+
 			for result := range moviesChannel {
 				movieAsJSON, err := json.Marshal(result.movie)
 				if err != nil {
@@ -43,6 +44,7 @@ func IndexMoviesAsDocuments(ctx context.Context, redisClient *redis.Client, movi
 				}
 				pipeline.JSONSet(ctx, KeyPrefix+strconv.Itoa(result.movieID+1), "$", string(movieAsJSON))
 			}
+
 			_, err := pipeline.Exec(ctx)
 			if err != nil {
 				log.Printf("Error writing JSON documents into Redis: %v", err)
