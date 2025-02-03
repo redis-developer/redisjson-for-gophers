@@ -20,7 +20,7 @@ func ConnectWithRedis(ctx context.Context) (*redis.Client, error) {
 		log.Printf("Error parsing the Redis URL: %v", err)
 		return nil, err
 	}
-	connOpts.UnstableResp3 = true // Required for Search
+	connOpts.Protocol = 2 // Using Resp2
 	redisClient := redis.NewClient(connOpts)
 
 	_, err = redisClient.Ping(ctx).Result()
