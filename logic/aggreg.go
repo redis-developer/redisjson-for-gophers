@@ -30,21 +30,16 @@ func MovieCountPerGenreAgg(ctx context.Context, redisClient *redis.Client) {
 		SortByMax: 5,
 	}
 
-	rawResult, err := redisClient.FTAggregateWithArgs(ctx, IndexName, "*", aggregOptions).RawResult()
+	aggregResult, err := redisClient.FTAggregateWithArgs(ctx, IndexName, "*", aggregOptions).Result()
 	if err != nil {
 		log.Printf("Error executing the aggregation: %v", err)
 		return
 	}
 
-	if rawResult != nil {
-		aggregationResults := rawResult.(map[interface{}]interface{})["results"].([]interface{})
-		if len(aggregationResults) > 0 {
-			fmt.Printf("🟥 Top 5 Genres and their Movie Count: \n")
-			for i, aggregResult := range aggregationResults {
-				entry := aggregResult.(map[interface{}]interface{})
-				extraAttribs := entry["extra_attributes"].(map[interface{}]interface{})
-				fmt.Printf("   %d)️ %s = %s\n", i+1, extraAttribs["genres"], extraAttribs["Count"])
-			}
+	if aggregResult.Total > 0 {
+		fmt.Printf("🟥 Top 5 Genres and their Movie Count: \n")
+		for i, aggregRow := range aggregResult.Rows {
+			fmt.Printf("   %d)️ %s = %s\n", i+1, aggregRow.Fields["genres"], aggregRow.Fields["Count"])
 		}
 	}
 }
