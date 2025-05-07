@@ -5,7 +5,7 @@ import (
 	"context"
 	"encoding/binary"
 	"github.com/openai/openai-go"
-	"github.com/openai/openai-go/shared"
+	"github.com/openai/openai-go/packages/param"
 	"log"
 )
 
@@ -13,9 +13,9 @@ func CreateEmbedding(ctx context.Context, text string) []float64 {
 	client := openai.NewClient()
 
 	params := openai.EmbeddingNewParams{
-		Input:          openai.F[openai.EmbeddingNewParamsInputUnion](shared.UnionString(text)),
-		Model:          openai.F(openai.EmbeddingModelTextEmbeddingAda002),
-		EncodingFormat: openai.F(openai.EmbeddingNewParamsEncodingFormatFloat),
+		Input:          openai.EmbeddingNewParamsInputUnion{OfString: param.Opt[string]{Value: text}},
+		Model:          openai.EmbeddingModelTextEmbeddingAda002,
+		EncodingFormat: openai.EmbeddingNewParamsEncodingFormatFloat,
 	}
 
 	response, err := client.Embeddings.New(ctx, params)
