@@ -3,7 +3,7 @@ services:
   redis-database:
     container_name: redis-database
     hostname: redis-database
-    image: redis:8.0.0
+    image: redis:8.0.2
     ports:
       - "6379:6379"
     healthcheck:
