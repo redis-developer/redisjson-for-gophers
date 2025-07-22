@@ -3,8 +3,8 @@ module redisjson4gophers
 go 1.23
 
 require (
-	github.com/openai/openai-go v0.1.0-beta.10
-	github.com/redis/go-redis/v9 v9.8.0
+	github.com/openai/openai-go v1.11.1
+	github.com/redis/go-redis/v9 v9.11.0
 )
 
 require (
