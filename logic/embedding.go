@@ -12,7 +12,9 @@ func CreateEmbedding(ctx context.Context, text string) []float64 {
 	client := openai.NewClient()
 
 	response, err := client.Embeddings.New(ctx, openai.EmbeddingNewParams{
-		Input:          openai.EmbeddingNewParamsInputUnion{OfString: openai.String(text)},
+		Input: openai.EmbeddingNewParamsInputUnion{
+			OfArrayOfStrings: []string{text},
+		},
 		Model:          openai.EmbeddingModelTextEmbeddingAda002,
 		EncodingFormat: openai.EmbeddingNewParamsEncodingFormatFloat,
 	})
